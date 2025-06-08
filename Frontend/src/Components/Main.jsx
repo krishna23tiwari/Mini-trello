@@ -12,7 +12,7 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-
+import { TouchSensor } from '@dnd-kit/core';
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -148,9 +148,6 @@ const TaskManager = () => {
   };
   
   
-  
-  
-
   const deleteList = async (id) => {
     try {
       await axios.delete(`${baseurl}/list/deletelist/${id}`, getAuthHeaders());
@@ -176,7 +173,7 @@ const TaskManager = () => {
     }
   };
 
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
   
 const handleDragEnd = async (event) => {
     const { active, over } = event;
@@ -239,7 +236,9 @@ const handleDragEnd = async (event) => {
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
   <div className="flex flex-wrap gap-4">
     {lists.map(list => (
-      <div key={list._id} className="relative bg-white rounded shadow-md p-4 w-64">
+      {/* <div key={list._id} className="relative bg-white rounded shadow-md p-4 w-64"> */},
+      <div key={list._id} className="relative bg-white rounded shadow-md p-4 w-full sm:w-64">
+
         <h2 className="font-semibold mb-2">{list.list}</h2>
 
 
@@ -260,7 +259,7 @@ const handleDragEnd = async (event) => {
 
 
 
-        <div className="flex gap-1 mt-2">
+        <div className="flex flex-col sm:flex-row gap-2 mt-2">
           <input
             type="text"
             value={taskInputs[list._id] || ''}
