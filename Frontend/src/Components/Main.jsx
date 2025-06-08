@@ -49,7 +49,7 @@ function SortableTask({ task, onEdit, onDelete }) {
     };
   
     return (
-      <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing">
         {isEditing ? (
           <div className="flex gap-1 items-center">
             <input
@@ -173,7 +173,19 @@ const TaskManager = () => {
     }
   };
 
-  const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
+  // const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
+
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    })
+  );
+  
   
 const handleDragEnd = async (event) => {
     const { active, over } = event;
@@ -236,7 +248,6 @@ const handleDragEnd = async (event) => {
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
   <div className="flex flex-wrap gap-4">
     {lists.map(list => (
-      {/* <div key={list._id} className="relative bg-white rounded shadow-md p-4 w-64"> */},
       <div key={list._id} className="relative bg-white rounded shadow-md p-4 w-full sm:w-64">
 
         <h2 className="font-semibold mb-2">{list.list}</h2>
